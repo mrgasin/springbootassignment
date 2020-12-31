@@ -9,7 +9,6 @@ import com.alasdoo.developercourseassignment.repositories.DeveloperCourseReposit
 import com.alasdoo.developercourseassignment.repositories.TeacherDeveloperCourseRepository;
 import com.alasdoo.developercourseassignment.repositories.TeacherRepository;
 import com.alasdoo.developercourseassignment.services.contracts.TeacherDeveloperCourseService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,31 +18,31 @@ import java.util.stream.Collectors;
 @Service
 public class TeacherDeveloperCourseServiceImpl implements TeacherDeveloperCourseService {
 
-    @Autowired
-    private TeacherDeveloperCourseRepository teacherDeveloperCourseRepository;
+    private final TeacherDeveloperCourseRepository teacherDeveloperCourseRepository;
+    private final TeacherRepository teacherRepository;
+    private final DeveloperCourseRepository developerCourseRepository;
+    private final TeacherDeveloperCourseMapper teacherDeveloperCourseMapper;
 
-    @Autowired
-    private TeacherRepository teacherRepository;
-
-    @Autowired
-    private DeveloperCourseRepository developerCourseRepository;
-
-    @Autowired
-    private TeacherDeveloperCourseMapper teacherDeveloperCourseMapper;
+    public TeacherDeveloperCourseServiceImpl(TeacherDeveloperCourseRepository teacherDeveloperCourseRepository, TeacherRepository teacherRepository, DeveloperCourseRepository developerCourseRepository, TeacherDeveloperCourseMapper teacherDeveloperCourseMapper) {
+        this.teacherDeveloperCourseRepository = teacherDeveloperCourseRepository;
+        this.teacherRepository = teacherRepository;
+        this.developerCourseRepository = developerCourseRepository;
+        this.teacherDeveloperCourseMapper = teacherDeveloperCourseMapper;
+    }
 
     @Override
     public TeacherDeveloperCourseDTO findOne(Integer id) {
         Optional<TeacherDeveloperCourse> teacherDeveloperCourse = teacherDeveloperCourseRepository.findById(id);
         if (!teacherDeveloperCourse.isPresent()) {
             throw new IllegalArgumentException
-                ("Teacher Developer Course with the following id = " + id + " is not found.");
+                    ("Teacher Developer Course with the following id = " + id + " is not found.");
         }
         return teacherDeveloperCourseMapper.transformToDTO(teacherDeveloperCourse.get());
     }
 
     @Override
     public List<TeacherDeveloperCourseDTO> findAll() {
-        return teacherDeveloperCourseRepository.findAll().stream().map(i -> teacherDeveloperCourseMapper.transformToDTO(i)).collect(Collectors.toList());
+        return teacherDeveloperCourseRepository.findAll().stream().map(teacherDeveloperCourseMapper::transformToDTO).collect(Collectors.toList());
     }
 
     @Override
@@ -55,15 +54,15 @@ public class TeacherDeveloperCourseServiceImpl implements TeacherDeveloperCourse
         Optional<DeveloperCourse> developerCourse = developerCourseRepository.findById(courseId);
         if (!teacher.isPresent()) {
             throw new IllegalArgumentException
-                ("Teacher with the following id = " + teacherId + " is not found.");
+                    ("Teacher with the following id = " + teacherId + " is not found.");
         }
         if (!developerCourse.isPresent()) {
             throw new IllegalArgumentException
-                ("Course with the following id = " + courseId + " is not found.");
+                    ("Course with the following id = " + courseId + " is not found.");
         }
         if (teacherDeveloperCourseRepository.findByDeveloperCourseIdAndTeacherId(courseId, teacherId).isPresent()) {
             throw new IllegalArgumentException
-                ("Teacher course combination is already present.");
+                    ("Teacher course combination is already present.");
         }
         return teacherDeveloperCourseMapper.transformToDTO(teacherDeveloperCourseRepository.save(teacherDeveloperCourse));
     }
@@ -73,7 +72,7 @@ public class TeacherDeveloperCourseServiceImpl implements TeacherDeveloperCourse
         Optional<TeacherDeveloperCourse> teacherDeveloperCourse = teacherDeveloperCourseRepository.findById(id);
         if (!teacherDeveloperCourse.isPresent()) {
             throw new IllegalArgumentException
-                ("Teacher Developer Course with the following id = " + id + " is not found.");
+                    ("Teacher Developer Course with the following id = " + id + " is not found.");
         }
         teacherDeveloperCourseRepository.deleteById(id);
     }
@@ -83,7 +82,7 @@ public class TeacherDeveloperCourseServiceImpl implements TeacherDeveloperCourse
         Optional<TeacherDeveloperCourse> oldTeacherDeveloperCourse = teacherDeveloperCourseRepository.findById(id);
         if (!oldTeacherDeveloperCourse.isPresent()) {
             throw new IllegalArgumentException
-                ("Teacher course with the following id = " + id + " is not found.");
+                    ("Teacher course with the following id = " + id + " is not found.");
         }
         oldTeacherDeveloperCourse.get().setDeveloperCourseId(teacherDeveloperCourseDTO.getDeveloperCourseId());
         oldTeacherDeveloperCourse.get().setTeacherId(teacherDeveloperCourseDTO.getTeacherId());
@@ -96,7 +95,7 @@ public class TeacherDeveloperCourseServiceImpl implements TeacherDeveloperCourse
         Optional<TeacherDeveloperCourse> teacherDeveloperCourse = teacherDeveloperCourseRepository.findByTeacherId(teacherId);
         if (!teacherDeveloperCourse.isPresent()) {
             throw new IllegalArgumentException
-                ("Teacher with the following id = " + teacherId + " is not found.");
+                    ("Teacher with the following id = " + teacherId + " is not found.");
         }
         return teacherDeveloperCourseMapper.transformToDTO(teacherDeveloperCourse.get());
     }

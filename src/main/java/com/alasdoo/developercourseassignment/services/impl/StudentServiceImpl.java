@@ -5,7 +5,6 @@ import com.alasdoo.developercourseassignment.entities.Student;
 import com.alasdoo.developercourseassignment.mappers.StudentMapper;
 import com.alasdoo.developercourseassignment.repositories.StudentRepository;
 import com.alasdoo.developercourseassignment.services.contracts.StudentService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,11 +14,13 @@ import java.util.stream.Collectors;
 @Service
 public class StudentServiceImpl implements StudentService {
 
-    @Autowired
-    private StudentRepository studentRepository;
+    private final StudentRepository studentRepository;
+    private  final  StudentMapper studentMapper;
 
-    @Autowired
-    private StudentMapper studentMapper;
+    public StudentServiceImpl(StudentRepository studentRepository, StudentMapper studentMapper) {
+        this.studentRepository = studentRepository;
+        this.studentMapper = studentMapper;
+    }
 
     @Override
     public StudentDTO findOne(Integer id) {
@@ -33,7 +34,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public List<StudentDTO> findAll() {
-        return studentRepository.findAll().stream().map(i -> studentMapper.transformToDTO(i)).collect(Collectors.toList());
+        return studentRepository.findAll().stream().map(studentMapper::transformToDTO).collect(Collectors.toList());
     }
 
     @Override

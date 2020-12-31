@@ -1,18 +1,9 @@
 package com.alasdoo.developercourseassignment.controllers;
 
 import com.alasdoo.developercourseassignment.dtos.StudentDTO;
-import com.alasdoo.developercourseassignment.services.impl.StudentServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.alasdoo.developercourseassignment.services.contracts.StudentService;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -20,42 +11,45 @@ import java.util.List;
 @RequestMapping("/student")
 @CrossOrigin
 public class StudentController {
+    
+    private final StudentService studentService;
 
-    @Autowired
-    private StudentServiceImpl studentServiceImpl;
+    public StudentController(StudentService studentService) {
+        this.studentService = studentService;
+    }
 
     @GetMapping(value = "/getStudent/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public StudentDTO selectStudent(@PathVariable("id") Integer id) {
-        return studentServiceImpl.findOne(id);
+        return studentService.findOne(id);
     }
 
     @GetMapping(value = "/getAll", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<StudentDTO> getAllStudents() {
-        return studentServiceImpl.findAll();
+        return studentService.findAll();
     }
 
     @PostMapping(value = "/addStudent", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public StudentDTO saveStudent(@RequestBody StudentDTO studentDTO) {
-        return studentServiceImpl.save(studentDTO);
+        return studentService.save(studentDTO);
     }
 
     @PutMapping(value = "/update/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public StudentDTO updateStudent(@PathVariable("id") Integer id, @RequestBody StudentDTO studentDTO) {
-        return studentServiceImpl.update(id, studentDTO);
+        return studentService.update(id, studentDTO);
     }
 
     @DeleteMapping(value = "/delete/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public void deleteStudent(@PathVariable("id") Integer id) {
-        studentServiceImpl.remove(id);
+        studentService.remove(id);
     }
 
     @GetMapping(value = "/get/{accountName}", produces = MediaType.APPLICATION_JSON_VALUE)
     public StudentDTO findByAccountName(@PathVariable("accountName") String accountName) {
-        return studentServiceImpl.findByAccountName(accountName);
+        return studentService.findByAccountName(accountName);
     }
 
     @GetMapping(value = "/get/{accountName}/{password}", produces = MediaType.APPLICATION_JSON_VALUE)
     public StudentDTO findByAccountName(@PathVariable("accountName") String accountName, @PathVariable("password") String password) {
-        return studentServiceImpl.findByAccountNameAndPassword(accountName, password);
+        return studentService.findByAccountNameAndPassword(accountName, password);
     }
 }

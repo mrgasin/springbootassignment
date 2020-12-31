@@ -9,7 +9,6 @@ import com.alasdoo.developercourseassignment.repositories.DeveloperCourseReposit
 import com.alasdoo.developercourseassignment.repositories.StudentDeveloperCourseRepository;
 import com.alasdoo.developercourseassignment.repositories.StudentRepository;
 import com.alasdoo.developercourseassignment.services.contracts.StudentDeveloperCourseService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,17 +18,17 @@ import java.util.stream.Collectors;
 @Service
 public class StudentDeveloperCourseServiceImpl implements StudentDeveloperCourseService {
 
-    @Autowired
-    private StudentDeveloperCourseRepository studentDeveloperCourseRepository;
+    private final StudentDeveloperCourseRepository studentDeveloperCourseRepository;
+    private final StudentRepository studentRepository;
+    private final DeveloperCourseRepository developerCourseRepository;
+    private final StudentDeveloperCourseMapper studentDeveloperCourseMapper;
 
-    @Autowired
-    private StudentRepository studentRepository;
-
-    @Autowired
-    private DeveloperCourseRepository developerCourseRepository;
-
-    @Autowired
-    private StudentDeveloperCourseMapper studentDeveloperCourseMapper;
+    public StudentDeveloperCourseServiceImpl(StudentDeveloperCourseRepository studentDeveloperCourseRepository, StudentRepository studentRepository, DeveloperCourseRepository developerCourseRepository, StudentDeveloperCourseMapper studentDeveloperCourseMapper) {
+        this.studentDeveloperCourseRepository = studentDeveloperCourseRepository;
+        this.studentRepository = studentRepository;
+        this.developerCourseRepository = developerCourseRepository;
+        this.studentDeveloperCourseMapper = studentDeveloperCourseMapper;
+    }
 
     @Override
     public StudentDeveloperCourseDTO findOne(Integer id) {
@@ -43,7 +42,7 @@ public class StudentDeveloperCourseServiceImpl implements StudentDeveloperCourse
 
     @Override
     public List<StudentDeveloperCourseDTO> findAll() {
-        return studentDeveloperCourseRepository.findAll().stream().map(i -> studentDeveloperCourseMapper.transformToDTO(i)).collect(Collectors.toList());
+        return studentDeveloperCourseRepository.findAll().stream().map(studentDeveloperCourseMapper::transformToDTO).collect(Collectors.toList());
     }
 
     @Override
