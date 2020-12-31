@@ -25,12 +25,22 @@ public class TeacherController {
 
     @GetMapping(value = "/getAll", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<TeacherDTO> getAllTeachers() {
-        return null;
+        return teacherService.findAll();
     }
 
     @PostMapping(value = "/addTeacher", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public TeacherDTO saveTeacher(@RequestBody TeacherDTO teacherDTO) {
         return teacherService.save(teacherDTO);
+    }
+
+    @PutMapping(value = "/update/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public TeacherDTO updateTeacher(@PathVariable Integer id, @RequestBody TeacherDTO teacherDTO) {
+        return teacherService.update(id, teacherDTO);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public void deleteTeacher(@PathVariable Integer id) {
+        teacherService.remove(id);
     }
 
     @GetMapping(value = "/get/{email}", produces = MediaType.APPLICATION_JSON_VALUE)
