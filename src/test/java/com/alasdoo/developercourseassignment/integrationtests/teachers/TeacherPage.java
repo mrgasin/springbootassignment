@@ -1,4 +1,4 @@
-package com.alasdoo.developercourseassignment.integrationtests.students;
+package com.alasdoo.developercourseassignment.integrationtests.teachers;
 
 import com.alasdoo.developercourseassignment.entities.Student;
 import com.alasdoo.developercourseassignment.integrationtests.PageObject;
@@ -12,29 +12,18 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.List;
 
-public class StudentPage extends PageObject {
-
-    static final String baseUrl = "http://localhost:3000/student";
-
+public class TeacherPage extends PageObject {
+    public static final String baseUrl = "http://localhost:3000/teacher";
     private WebDriverWait wait;
-
-    @FindBy(tagName = "h6")
-    private WebElement header;
-
-    @FindBy(name = "name")
+    @FindBy(name = "teacherName")
     private WebElement name;
 
-    @FindBy(name = "surname")
+    @FindBy(name = "teacherSurname")
     private WebElement surname;
 
-    @FindBy(name = "accountName")
-    private WebElement accountName;
-
-    @FindBy(name = "email")
+    @FindBy(name = "teacherEmail")
     private WebElement email;
 
-    @FindBy(name = "bankCardNumber")
-    private WebElement bankCardNumber;
 
     @FindBy(xpath = "/html/body/div/div/main/div[2]/button")
     private WebElement add;
@@ -47,37 +36,34 @@ public class StudentPage extends PageObject {
 
 
     @FindBy(css = "div[role = 'row']")
-    private List<WebElement> tableRows;
+    private List<WebElement> teachers;
 
     @FindBy(xpath = "/html/body/div/div/main/div[2]/div/div/div[1]/div/div[3]/div/div[2]/div/p")
     private WebElement paginated;
 
-    public StudentPage(WebDriver webDriver) {
+    public TeacherPage(WebDriver webDriver) {
         super(webDriver);
         wait = new WebDriverWait(webDriver, 10);
     }
 
-    public String getHeaderText() {
-        return header.getText();
-    }
-
-    public void addStudent() {
+    public void addTeacher() {
         Student student = FakerGenerator.newStudent();
         WebElement addButton = wait.until(ExpectedConditions.elementToBeClickable(add));
         addButton.click();
+        name.clear();
         name.sendKeys(student.getName());
+        surname.clear();
         surname.sendKeys(student.getSurname());
+        email.clear();
         email.sendKeys(student.getEmail());
-        accountName.sendKeys(student.getAccountName());
-        bankCardNumber.sendKeys(student.getBankCardNumber().toString());
         save.click();
     }
 
-    public void updateStudent(int index) {
-        if (numberOfElements() > 0 && index < numberOfElements()) {
-            WebElement row = tableRows.get(index);
-            wait.until(ExpectedConditions.visibilityOf(row));
+    public void updateTeacher(int index) {
+        if (numberOfElements() > 0) {
+            WebElement row = teachers.get(index);
             wait.until(ExpectedConditions.elementToBeClickable(row));
+            wait.until(ExpectedConditions.visibilityOf(row));
             row.click();
             name.sendKeys(" II");
             surname.sendKeys(" II");
@@ -85,12 +71,11 @@ public class StudentPage extends PageObject {
         }
     }
 
-    public void deleteStudent(int index) {
+    public void deleteTeacher(int index) {
         if (numberOfElements() > 0) {
-            WebElement student = tableRows.get(index);
-            wait.until(ExpectedConditions.visibilityOf(student));
-            wait.until(ExpectedConditions.elementToBeClickable(student));
-            student.click();
+            WebElement row = teachers.get(index);
+            WebElement teacher = wait.until(ExpectedConditions.elementToBeClickable(row));
+            teacher.click();
             delete.click();
         }
     }
@@ -104,13 +89,11 @@ public class StudentPage extends PageObject {
     }
 
     public Integer oldNameLength(int index) {
-        if (numberOfElements() > 0) {
-            WebElement student = tableRows.get(index).findElement(By.cssSelector("div[data-field = 'name']"));
-            wait.until(ExpectedConditions.visibilityOf(student));
-            String oldName = student.getText();
-            return oldName.length();
-        }
-        return 0;
+        WebElement teacher = teachers.get(index).findElement(By.cssSelector("div[data-field = 'teacherName']"));
+        wait.until(ExpectedConditions.visibilityOf(teacher));
+        wait.until(ExpectedConditions.elementToBeClickable(teacher));
+        String oldName = teacher.getText();
+        return oldName.length();
     }
 
     public Integer updatedNameLength() {

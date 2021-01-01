@@ -21,17 +21,15 @@ public class StudentTest extends FunctionalTest {
 
     @Test
     public void header() {
-        webDriver.get(baseUrl);
         assertEquals(studentPage.getHeaderText(), "Student");
         log.info("STUDENT HEADER " + studentPage.getHeaderText());
     }
 
     @Test
-    public void addStudent() throws InterruptedException {
+    public void addStudent() {
         log.info("Creation of new student started");
         int sizeBefore = studentPage.numberOfElements();
         studentPage.addStudent();
-        Thread.sleep(2000);
         int sizeAfter = studentPage.numberOfElements();
         assertEquals(sizeAfter, sizeBefore + 1);
         log.info("Student created");
@@ -43,10 +41,11 @@ public class StudentTest extends FunctionalTest {
         studentPage.deleteStudent(1);
         int newSize = studentPage.numberOfElements();
         assertEquals(oldSize - 1, newSize);
+        log.info("Student deleted");
     }
 
     @Test
-    public void updateStudent() throws InterruptedException {
+    public void updateStudent() {
         int index = 1;
         log.info("Updating of the student started");
         int oldNameLength = studentPage.oldNameLength(index);

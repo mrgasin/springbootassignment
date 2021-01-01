@@ -11,7 +11,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
-public class FunctionalTest {
+abstract public class FunctionalTest {
 
     protected static WebDriver webDriver;
 
