@@ -2,6 +2,7 @@ package com.alasdoo.developercourseassignment.controllers;
 
 import com.alasdoo.developercourseassignment.dtos.StudentDTO;
 import com.alasdoo.developercourseassignment.services.contracts.StudentService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,6 +29,7 @@ public class StudentController {
         return studentService.findAll();
     }
 
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(value = "/addStudent", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public StudentDTO saveStudent(@RequestBody StudentDTO studentDTO) {
         return studentService.save(studentDTO);
@@ -48,8 +50,8 @@ public class StudentController {
         return studentService.findByAccountName(accountName);
     }
 
-    @GetMapping(value = "/get/{accountName}/{password}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public StudentDTO findByAccountName(@PathVariable("accountName") String accountName, @PathVariable("password") String password) {
-        return studentService.findByAccountNameAndPassword(accountName, password);
-    }
+//    @GetMapping(value = "/get/{accountName}/{password}", produces = MediaType.APPLICATION_JSON_VALUE)
+//    public StudentDTO findByAccountName(@PathVariable("accountName") String accountName, @PathVariable("password") String password) {
+//        return studentService.findByAccountNameAndPassword(accountName, password);
+//    }
 }

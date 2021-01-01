@@ -1,4 +1,4 @@
-package com.alasdoo.developercourseassignment.services.impl;
+package com.alasdoo.developercourseassignment.services.implementations;
 
 import com.alasdoo.developercourseassignment.dtos.TeacherDTO;
 import com.alasdoo.developercourseassignment.entities.Teacher;
@@ -24,8 +24,7 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Override
     public TeacherDTO findOne(Integer id) {
-        Teacher teacher = teacherRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Teacher with following id= " + id + " is not found."));
+        Teacher teacher = getTeacherById(id);
         return teacherMapper.transformToDTO(teacher);
     }
 
@@ -42,15 +41,13 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Override
     public void remove(Integer id) {
-        teacherRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Teacher with following id = " + id + " is not found."));
+        getTeacherById(id);
         teacherRepository.deleteById(id);
     }
 
     @Override
     public TeacherDTO update(Integer id, TeacherDTO teacherDTO) {
-        Teacher oldTeacher = teacherRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Teacher with the following id = " + id + " is not found."));
+        Teacher oldTeacher = getTeacherById(id);
 
         oldTeacher.setTeacherName(teacherDTO.getTeacherName());
         oldTeacher.setTeacherEmail(teacherDTO.getTeacherEmail());
@@ -61,15 +58,28 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Override
     public TeacherDTO findByTeacherNameAndTeacherSurname(String name, String surname) {
-        Teacher teacher = teacherRepository.findByTeacherNameAndTeacherSurname(name, surname)
-                .orElseThrow(() -> new IllegalArgumentException("Teacher with the following name = " + name + " and surname= " + surname + " combination is not found."));
+        Teacher teacher = getTeacherByNameAndSurname(name, surname);
         return teacherMapper.transformToDTO(teacher);
     }
 
     @Override
     public TeacherDTO findByTeacherEmail(String email) {
-        Teacher teacher = teacherRepository.findByTeacherEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("Teacher with the following email = " + email + " is not found."));
+        Teacher teacher = getTeacherByEmail(email);
         return teacherMapper.transformToDTO(teacher);
+    }
+
+    private Teacher getTeacherById(Integer id) {
+        return teacherRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Teacher with the following id = " + id + " is not found."));
+    }
+
+    private Teacher getTeacherByEmail(String email) {
+        return teacherRepository.findByTeacherEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("Teacher with the following email = " + email + " is not found."));
+    }
+
+    private Teacher getTeacherByNameAndSurname(String name, String surname) {
+        return teacherRepository.findByTeacherNameAndTeacherSurname(name, surname)
+                .orElseThrow(() -> new IllegalArgumentException("Teacher with the following name = " + name + " and surname= " + surname + " combination is not found."));
     }
 }

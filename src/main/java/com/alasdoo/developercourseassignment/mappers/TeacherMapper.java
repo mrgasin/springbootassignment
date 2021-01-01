@@ -19,5 +19,4 @@ public class TeacherMapper {
         BeanUtils.copyProperties(teacherDTOSrc, developerCourseTeacher);
         return developerCourseTeacher;
     }
-
 }

@@ -1,4 +1,4 @@
-package com.alasdoo.developercourseassignment.services.impl;
+package com.alasdoo.developercourseassignment.services.implementations;
 
 import com.alasdoo.developercourseassignment.dtos.StudentDeveloperCourseDTO;
 import com.alasdoo.developercourseassignment.entities.DeveloperCourse;

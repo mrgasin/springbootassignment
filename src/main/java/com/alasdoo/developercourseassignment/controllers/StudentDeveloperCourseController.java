@@ -2,6 +2,7 @@ package com.alasdoo.developercourseassignment.controllers;
 
 import com.alasdoo.developercourseassignment.dtos.StudentDeveloperCourseDTO;
 import com.alasdoo.developercourseassignment.services.contracts.StudentDeveloperCourseService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,6 +29,7 @@ public class StudentDeveloperCourseController {
         return studentDeveloperCourseService.findAll();
     }
 
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(value = "/addStudentDeveloperCourse", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public StudentDeveloperCourseDTO saveStudentDeveloperCourse(@RequestBody StudentDeveloperCourseDTO studentDeveloperCourseDTO) {
         return studentDeveloperCourseService.save(studentDeveloperCourseDTO);
