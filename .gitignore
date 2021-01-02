@@ -37,6 +37,7 @@ build/
 
 # testing
 /src/frontend/coverage
+src/test/resources
 
 # production
 /src/frontend/build

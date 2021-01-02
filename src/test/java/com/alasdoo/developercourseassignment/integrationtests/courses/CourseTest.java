@@ -4,12 +4,14 @@ import com.alasdoo.developercourseassignment.integrationtests.FunctionalTest;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.support.PageFactory;
 
 import static com.alasdoo.developercourseassignment.integrationtests.courses.CoursePage.baseUrl;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Slf4j
+@ExtendWith(FunctionalTest.class)
 public class CourseTest extends FunctionalTest {
     CoursePage coursePage;
 
