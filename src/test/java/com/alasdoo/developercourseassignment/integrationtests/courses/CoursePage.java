@@ -35,8 +35,8 @@ public class CoursePage extends PageObject {
     @FindBy(css = "button[data-test-id = 'delete']")
     private WebElement delete;
 
-    @FindBy(xpath = "/html/body/div/div/main/div[2]/div/div/div[1]/div/div[3]/div/div[2]/div/p")
-    private WebElement paginated;
+    @FindBy(css = ".makeStyles-mainContent-4 div[role = 'grid']")
+    private WebElement table;
 
     @FindBy(css = "div[role = 'row']")
     private List<WebElement> courses;
@@ -58,6 +58,7 @@ public class CoursePage extends PageObject {
 
     public void updateCourse(int index) {
         if (numberOfElements() > 0) {
+            wait.until(ExpectedConditions.visibilityOfAllElements(courses));
             WebElement course = courses.get(index);
             wait.until(ExpectedConditions.visibilityOf(course));
             wait.until(ExpectedConditions.elementToBeClickable(course));
@@ -74,6 +75,7 @@ public class CoursePage extends PageObject {
 
     public void deleteCourse(int index) {
         if (numberOfElements() > 0) {
+            wait.until(ExpectedConditions.visibilityOfAllElements(courses));
             WebElement course = courses.get(index);
             wait.until(ExpectedConditions.visibilityOf(course));
             wait.until(ExpectedConditions.elementToBeClickable(course));
@@ -83,14 +85,11 @@ public class CoursePage extends PageObject {
     }
 
     public Integer numberOfElements() {
-        if (paginated != null) {
-            String text = paginated.getText();
-            return Integer.parseInt(text.substring(text.lastIndexOf("f") + 1).trim());
-        }
-        return 0;
+        return Integer.parseInt(table.getAttribute("aria-rowcount"));
     }
 
     public Integer oldPrice(int index) {
+        wait.until(ExpectedConditions.visibilityOfAllElements(courses));
         WebElement course = courses.get(index).findElement(By.cssSelector("div[data-field = 'costPerClass']"));
         wait.until(ExpectedConditions.visibilityOf(course));
         String value = course.getText();

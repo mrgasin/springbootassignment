@@ -45,12 +45,11 @@ public class StudentPage extends PageObject {
     @FindBy(css = "button[data-test-id = 'delete']")
     private WebElement delete;
 
+    @FindBy(css = ".makeStyles-mainContent-4 div[role = 'grid']")
+    private WebElement table;
 
     @FindBy(css = "div[role = 'row']")
     private List<WebElement> tableRows;
-
-    @FindBy(xpath = "/html/body/div/div/main/div[2]/div/div/div[1]/div/div[3]/div/div[2]/div/p")
-    private WebElement paginated;
 
     public StudentPage(WebDriver webDriver) {
         super(webDriver);
@@ -96,11 +95,7 @@ public class StudentPage extends PageObject {
     }
 
     public Integer numberOfElements() {
-        if (paginated != null) {
-            String text = paginated.getText();
-            return Integer.parseInt(text.substring(text.lastIndexOf("f") + 1).trim());
-        }
-        return 0;
+        return Integer.parseInt(table.getAttribute("aria-rowcount"));
     }
 
     public Integer oldNameLength(int index) {
