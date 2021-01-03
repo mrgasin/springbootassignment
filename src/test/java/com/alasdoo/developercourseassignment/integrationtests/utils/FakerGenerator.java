@@ -7,6 +7,10 @@ import com.alasdoo.developercourseassignment.integrationtests.utils.models.Perso
 import com.github.javafaker.Faker;
 
 public class FakerGenerator {
+
+    private FakerGenerator() {
+    }
+
     private static Faker faker = new Faker();
 
     private static Person newPerson() {

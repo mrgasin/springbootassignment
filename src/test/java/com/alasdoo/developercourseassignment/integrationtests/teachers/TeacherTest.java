@@ -1,7 +1,9 @@
 package com.alasdoo.developercourseassignment.integrationtests.teachers;
 
 import com.alasdoo.developercourseassignment.integrationtests.FunctionalTest;
+import com.alasdoo.developercourseassignment.integrationtests.teachercourses.TeacherCoursesPage;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,6 +17,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class TeacherTest extends FunctionalTest {
 
     private TeacherPage teacherPage;
+
+    @BeforeAll
+    public static void start() {
+        log.info("endpoint: " + baseUrl);
+    }
 
     @BeforeEach
     public void init() {

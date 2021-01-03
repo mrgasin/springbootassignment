@@ -4,6 +4,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public final class CaseFormat {
+    private CaseFormat() {
+    }
 
     public static String toLowerUnderscore(String upperCamel) {
         return Stream
