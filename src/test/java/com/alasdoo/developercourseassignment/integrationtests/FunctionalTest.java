@@ -1,6 +1,6 @@
 package com.alasdoo.developercourseassignment.integrationtests;
 
-import com.alasdoo.developercourseassignment.integrationtests.config.WebDriverFactory;
+import com.alasdoo.developercourseassignment.integrationtests.utils.WebDriverFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.extension.*;
 import org.openqa.selenium.WebDriver;

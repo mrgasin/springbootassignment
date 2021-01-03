@@ -33,7 +33,9 @@ public class FileUtils {
         values.forEach(string -> {
             if (string.contains("=")) {
                 String[] splitted = string.toLowerCase().split("=");
-                map.put(splitted[0].trim(), splitted[1].trim());
+                String key = splitted[0].trim();
+                String value = splitted.length > 1 ? splitted[1].trim() : "";
+                map.put(key, value);
             }
         });
         return map;

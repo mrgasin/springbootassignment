@@ -6,5 +6,4 @@ public interface StudentService extends CrudService<StudentDTO> {
 
     StudentDTO findByAccountName(String accountName);
 
-    StudentDTO findByAccountNameAndPassword(String accountName, String password);
 }

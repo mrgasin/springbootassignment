@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import static com.alasdoo.developercourseassignment.integrationtests.config.WebDriverFactory.BROWSER;
+import static com.alasdoo.developercourseassignment.integrationtests.utils.WebDriverFactory.BROWSER;
 
 @Slf4j
 public class SnapshotUtils {

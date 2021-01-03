@@ -17,4 +17,6 @@ public interface TeacherDeveloperCourseRepository extends JpaRepository<TeacherD
     Optional<TeacherDeveloperCourse> findByTeacherId(Integer teacherId);
 
     void deleteAllByDeveloperCourseId(Integer courseId);
+
+    void deleteAllByTeacherId(Integer teacherId);
 }

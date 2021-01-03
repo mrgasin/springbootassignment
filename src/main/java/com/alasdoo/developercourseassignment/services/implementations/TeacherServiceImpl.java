@@ -3,10 +3,12 @@ package com.alasdoo.developercourseassignment.services.implementations;
 import com.alasdoo.developercourseassignment.dtos.TeacherDTO;
 import com.alasdoo.developercourseassignment.entities.Teacher;
 import com.alasdoo.developercourseassignment.mappers.TeacherMapper;
+import com.alasdoo.developercourseassignment.repositories.TeacherDeveloperCourseRepository;
 import com.alasdoo.developercourseassignment.repositories.TeacherRepository;
 import com.alasdoo.developercourseassignment.services.contracts.TeacherService;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,11 +16,12 @@ import java.util.stream.Collectors;
 public class TeacherServiceImpl implements TeacherService {
 
     private final TeacherRepository teacherRepository;
-
+    private final TeacherDeveloperCourseRepository teacherDeveloperCourseRepository;
     private final TeacherMapper teacherMapper;
 
-    public TeacherServiceImpl(TeacherRepository teacherRepository, TeacherMapper teacherMapper) {
+    public TeacherServiceImpl(TeacherRepository teacherRepository, TeacherDeveloperCourseRepository teacherDeveloperCourseRepository, TeacherMapper teacherMapper) {
         this.teacherRepository = teacherRepository;
+        this.teacherDeveloperCourseRepository = teacherDeveloperCourseRepository;
         this.teacherMapper = teacherMapper;
     }
 
@@ -40,20 +43,19 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
+    @Transactional
     public void remove(Integer id) {
         getTeacherById(id);
         teacherRepository.deleteById(id);
+        teacherDeveloperCourseRepository.deleteAllByTeacherId(id);
     }
 
     @Override
     public TeacherDTO update(Integer id, TeacherDTO teacherDTO) {
         Teacher oldTeacher = getTeacherById(id);
-
-        oldTeacher.setTeacherName(teacherDTO.getTeacherName());
-        oldTeacher.setTeacherEmail(teacherDTO.getTeacherEmail());
-        oldTeacher.setTeacherSurname(teacherDTO.getTeacherSurname());
-        Teacher updatedTeacher = teacherRepository.save(oldTeacher);
-        return teacherMapper.transformToDTO(updatedTeacher);
+        Teacher teacher = teacherMapper.transformToEntity(teacherDTO);
+        teacher.setId(oldTeacher.getId());
+        return teacherMapper.transformToDTO(teacherRepository.save(teacher));
     }
 
     @Override

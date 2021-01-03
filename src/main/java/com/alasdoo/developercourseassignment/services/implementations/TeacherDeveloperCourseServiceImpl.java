@@ -32,12 +32,8 @@ public class TeacherDeveloperCourseServiceImpl implements TeacherDeveloperCourse
 
     @Override
     public TeacherDeveloperCourseDTO findOne(Integer id) {
-        Optional<TeacherDeveloperCourse> teacherDeveloperCourse = teacherDeveloperCourseRepository.findById(id);
-        if (!teacherDeveloperCourse.isPresent()) {
-            throw new IllegalArgumentException
-                    ("Teacher Developer Course with the following id = " + id + " is not found.");
-        }
-        return teacherDeveloperCourseMapper.transformToDTO(teacherDeveloperCourse.get());
+        TeacherDeveloperCourse teacherDeveloperCourse = findById(id);
+        return teacherDeveloperCourseMapper.transformToDTO(teacherDeveloperCourse);
     }
 
     @Override
@@ -69,25 +65,16 @@ public class TeacherDeveloperCourseServiceImpl implements TeacherDeveloperCourse
 
     @Override
     public void remove(Integer id) throws IllegalArgumentException {
-        Optional<TeacherDeveloperCourse> teacherDeveloperCourse = teacherDeveloperCourseRepository.findById(id);
-        if (!teacherDeveloperCourse.isPresent()) {
-            throw new IllegalArgumentException
-                    ("Teacher Developer Course with the following id = " + id + " is not found.");
-        }
+        findById(id);
         teacherDeveloperCourseRepository.deleteById(id);
     }
 
     @Override
     public TeacherDeveloperCourseDTO update(Integer id, TeacherDeveloperCourseDTO teacherDeveloperCourseDTO) {
-        Optional<TeacherDeveloperCourse> oldTeacherDeveloperCourse = teacherDeveloperCourseRepository.findById(id);
-        if (!oldTeacherDeveloperCourse.isPresent()) {
-            throw new IllegalArgumentException
-                    ("Teacher course with the following id = " + id + " is not found.");
-        }
-        oldTeacherDeveloperCourse.get().setDeveloperCourseId(teacherDeveloperCourseDTO.getDeveloperCourseId());
-        oldTeacherDeveloperCourse.get().setTeacherId(teacherDeveloperCourseDTO.getTeacherId());
-        teacherDeveloperCourseRepository.save(oldTeacherDeveloperCourse.get());
-        return teacherDeveloperCourseMapper.transformToDTO(oldTeacherDeveloperCourse.get());
+        TeacherDeveloperCourse oldTeacherDeveloperCourse = findById(id);
+        TeacherDeveloperCourse course = teacherDeveloperCourseMapper.transformToEntity(teacherDeveloperCourseDTO);
+        course.setId(oldTeacherDeveloperCourse.getId());
+        return teacherDeveloperCourseMapper.transformToDTO(teacherDeveloperCourseRepository.save(course));
     }
 
     @Override
@@ -98,5 +85,10 @@ public class TeacherDeveloperCourseServiceImpl implements TeacherDeveloperCourse
                     ("Teacher with the following id = " + teacherId + " is not found.");
         }
         return teacherDeveloperCourseMapper.transformToDTO(teacherDeveloperCourse.get());
+    }
+
+    private TeacherDeveloperCourse findById(Integer id) {
+        return teacherDeveloperCourseRepository.findById(id).orElseThrow(() -> new IllegalArgumentException
+                ("Teacher Developer Course with the following id = " + id + " is not found."));
     }
 }

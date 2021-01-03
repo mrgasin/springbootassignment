@@ -12,7 +12,7 @@ import java.util.List;
 @RequestMapping("/student")
 @CrossOrigin
 public class StudentController {
-    
+
     private final StudentService studentService;
 
     public StudentController(StudentService studentService) {
@@ -49,9 +49,4 @@ public class StudentController {
     public StudentDTO findByAccountName(@PathVariable("accountName") String accountName) {
         return studentService.findByAccountName(accountName);
     }
-
-//    @GetMapping(value = "/get/{accountName}/{password}", produces = MediaType.APPLICATION_JSON_VALUE)
-//    public StudentDTO findByAccountName(@PathVariable("accountName") String accountName, @PathVariable("password") String password) {
-//        return studentService.findByAccountNameAndPassword(accountName, password);
-//    }
 }

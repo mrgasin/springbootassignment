@@ -32,12 +32,8 @@ public class StudentDeveloperCourseServiceImpl implements StudentDeveloperCourse
 
     @Override
     public StudentDeveloperCourseDTO findOne(Integer id) {
-        Optional<StudentDeveloperCourse> studentDeveloperCourse = studentDeveloperCourseRepository.findById(id);
-        if (!studentDeveloperCourse.isPresent()) {
-            throw new IllegalArgumentException
-                ("Student course with the following id = " + id + " is not found.");
-        }
-        return studentDeveloperCourseMapper.transformToDTO(studentDeveloperCourse.get());
+        StudentDeveloperCourse studentDeveloperCourse = getStudentDeveloperCourseById(id);
+        return studentDeveloperCourseMapper.transformToDTO(studentDeveloperCourse);
     }
 
     @Override
@@ -54,41 +50,33 @@ public class StudentDeveloperCourseServiceImpl implements StudentDeveloperCourse
         Optional<DeveloperCourse> developerCourse = developerCourseRepository.findById(courseId);
         if (!student.isPresent()) {
             throw new IllegalArgumentException
-                ("Student with the following id = " + studentId + " is not found.");
+                    ("Student with the following id = " + studentId + " is not found.");
         }
         if (!developerCourse.isPresent()) {
             throw new IllegalArgumentException
-                ("Course with the following id = " + courseId + " is not found.");
+                    ("Course with the following id = " + courseId + " is not found.");
         }
         if (studentDeveloperCourseRepository.findByDeveloperCourseIdAndStudentId(courseId, studentId).isPresent()) {
             throw new IllegalArgumentException
-                ("Student course combination is already present.");
+                    ("Student course combination is already present.");
         }
         return studentDeveloperCourseMapper.transformToDTO(studentDeveloperCourseRepository.save(studentDeveloperCourse));
     }
 
     @Override
     public void remove(Integer id) {
-        Optional<StudentDeveloperCourse> studentDeveloperCourse = studentDeveloperCourseRepository.findById(id);
-        if (!studentDeveloperCourse.isPresent()) {
-            throw new IllegalArgumentException
-                ("Student course with the following id = " + id + " is not found.");
-        }
+        getStudentDeveloperCourseById(id);
         studentDeveloperCourseRepository.deleteById(id);
     }
 
     @Override
     public StudentDeveloperCourseDTO update(Integer id, StudentDeveloperCourseDTO studentDeveloperCourseDTO) {
-        Optional<StudentDeveloperCourse> oldStudentDeveloperCourse = studentDeveloperCourseRepository.findById(id);
-        if (!oldStudentDeveloperCourse.isPresent()) {
-            throw new IllegalArgumentException
-                ("Student course with the following id = " + id + " is not found.");
-        }
-        oldStudentDeveloperCourse.get().setDeveloperCourseId(studentDeveloperCourseDTO.getDeveloperCourseId());
-        oldStudentDeveloperCourse.get().setStudentId(studentDeveloperCourseDTO.getStudentId());
-        oldStudentDeveloperCourse.get().setClassesBought(studentDeveloperCourseDTO.getClassesBought());
-        studentDeveloperCourseRepository.save(oldStudentDeveloperCourse.get());
-        return studentDeveloperCourseMapper.transformToDTO(oldStudentDeveloperCourse.get());
+        StudentDeveloperCourse oldStudentDeveloperCourse = getStudentDeveloperCourseById(id);
+        oldStudentDeveloperCourse.setDeveloperCourseId(studentDeveloperCourseDTO.getDeveloperCourseId());
+        oldStudentDeveloperCourse.setStudentId(studentDeveloperCourseDTO.getStudentId());
+        oldStudentDeveloperCourse.setClassesBought(studentDeveloperCourseDTO.getClassesBought());
+        studentDeveloperCourseRepository.save(oldStudentDeveloperCourse);
+        return studentDeveloperCourseMapper.transformToDTO(oldStudentDeveloperCourse);
     }
 
     @Override
@@ -96,7 +84,7 @@ public class StudentDeveloperCourseServiceImpl implements StudentDeveloperCourse
         Optional<StudentDeveloperCourse> studentDeveloperCourse = studentDeveloperCourseRepository.findByStudentId(studentId);
         if (!studentDeveloperCourse.isPresent()) {
             throw new IllegalArgumentException
-                ("Student with the following id = " + studentId + " is not found.");
+                    ("Student with the following id = " + studentId + " is not found.");
         }
         return studentDeveloperCourseMapper.transformToDTO(studentDeveloperCourse.get());
     }
@@ -106,8 +94,13 @@ public class StudentDeveloperCourseServiceImpl implements StudentDeveloperCourse
         Optional<List<StudentDeveloperCourse>> studentDeveloperCourse = studentDeveloperCourseRepository.findByDeveloperCourseId(developerCourseId);
         if (!studentDeveloperCourse.isPresent()) {
             throw new IllegalArgumentException
-                ("Course with the following id = " + developerCourseId + " is not found.");
+                    ("Course with the following id = " + developerCourseId + " is not found.");
         }
         return studentDeveloperCourseMapper.transformToListOfDTO(studentDeveloperCourse.get());
+    }
+
+    private StudentDeveloperCourse getStudentDeveloperCourseById(Integer id) {
+        return studentDeveloperCourseRepository.findById(id).orElseThrow(() -> new IllegalArgumentException
+                ("Student course with the following id = " + id + " is not found."));
     }
 }

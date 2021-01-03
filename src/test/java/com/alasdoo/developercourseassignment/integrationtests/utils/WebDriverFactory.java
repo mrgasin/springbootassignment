@@ -1,4 +1,4 @@
-package com.alasdoo.developercourseassignment.integrationtests.config;
+package com.alasdoo.developercourseassignment.integrationtests.utils;
 
 import com.alasdoo.developercourseassignment.integrationtests.utils.FileUtils;
 import io.github.bonigarcia.wdm.WebDriverManager;
@@ -19,7 +19,6 @@ public class WebDriverFactory {
     }
 
     public static WebDriver driver() {
-        log.error(FileUtils.getValue(BROWSER));
         switch (FileUtils.getValue(BROWSER)) {
             case "chrome":
                 WebDriverManager.chromedriver().setup();

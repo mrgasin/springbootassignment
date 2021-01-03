@@ -8,7 +8,7 @@ public interface DeveloperCourseService extends CrudService<DeveloperCourseDTO> 
 
     List<DeveloperCourseDTO> findByDeveloperCourseName(String developerCourseName);
 
-    List<DeveloperCourseDTO> findByDeveloperCourseByStudentId(Integer studentId);
+    List<DeveloperCourseDTO> findDeveloperCoursesByStudentId(Integer studentId);
 
-    List<DeveloperCourseDTO> findByDeveloperCourseByTeacherId(Integer teacherId);
+    List<DeveloperCourseDTO> findDeveloperCoursesByTeacherId(Integer teacherId);
 }

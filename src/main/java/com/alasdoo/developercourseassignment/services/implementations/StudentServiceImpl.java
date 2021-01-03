@@ -3,10 +3,12 @@ package com.alasdoo.developercourseassignment.services.implementations;
 import com.alasdoo.developercourseassignment.dtos.StudentDTO;
 import com.alasdoo.developercourseassignment.entities.Student;
 import com.alasdoo.developercourseassignment.mappers.StudentMapper;
+import com.alasdoo.developercourseassignment.repositories.StudentDeveloperCourseRepository;
 import com.alasdoo.developercourseassignment.repositories.StudentRepository;
 import com.alasdoo.developercourseassignment.services.contracts.StudentService;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -15,21 +17,19 @@ import java.util.stream.Collectors;
 public class StudentServiceImpl implements StudentService {
 
     private final StudentRepository studentRepository;
-    private  final  StudentMapper studentMapper;
+    private final StudentMapper studentMapper;
+    private final StudentDeveloperCourseRepository studentDeveloperCourseRepository;
 
-    public StudentServiceImpl(StudentRepository studentRepository, StudentMapper studentMapper) {
+    public StudentServiceImpl(StudentRepository studentRepository, StudentMapper studentMapper, StudentDeveloperCourseRepository studentDeveloperCourseRepository) {
         this.studentRepository = studentRepository;
         this.studentMapper = studentMapper;
+        this.studentDeveloperCourseRepository = studentDeveloperCourseRepository;
     }
 
     @Override
     public StudentDTO findOne(Integer id) {
-        Optional<Student> student = studentRepository.findById(id);
-        if (!student.isPresent()) {
-            throw new IllegalArgumentException
-                ("Student with the following id = " + id + " is not found.");
-        }
-        return studentMapper.transformToDTO(student.get());
+        Student student = findById(id);
+        return studentMapper.transformToDTO(student);
     }
 
     @Override
@@ -44,30 +44,20 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
+    @Transactional
     public void remove(Integer id) throws IllegalArgumentException {
-        Optional<Student> student = studentRepository.findById(id);
-        if (!student.isPresent()) {
-            throw new IllegalArgumentException
-                ("Student with the following id = " + id + " is not found.");
-        }
+        findById(id);
+        studentDeveloperCourseRepository.deleteAllByStudentId(id);
         studentRepository.deleteById(id);
     }
 
     @Override
     public StudentDTO update(Integer id, StudentDTO studentDTO) {
-        Optional<Student> oldStudent = studentRepository.findById(id);
-        if (!oldStudent.isPresent()) {
-            throw new IllegalArgumentException
-                ("Student with the following id = " + id + " is not found.");
-        }
-        oldStudent.get().setName(studentDTO.getName());
-        oldStudent.get().setSurname(studentDTO.getSurname());
-        oldStudent.get().setAccountName(studentDTO.getAccountName());
-        oldStudent.get().setPassword(studentDTO.getPassword());
-        oldStudent.get().setEmail(studentDTO.getEmail());
-        oldStudent.get().setBankCardNumber(studentDTO.getBankCardNumber());
-        studentRepository.save(oldStudent.get());
-        return studentMapper.transformToDTO(oldStudent.get());
+        Student oldStudent = findById(id);
+        Student s = studentMapper.transformToEntity(studentDTO);
+        s.setId(oldStudent.getId());
+        studentRepository.save(s);
+        return studentMapper.transformToDTO(s);
     }
 
     @Override
@@ -75,18 +65,13 @@ public class StudentServiceImpl implements StudentService {
         Optional<Student> student = studentRepository.findByAccountName(accountName);
         if (!student.isPresent()) {
             throw new IllegalArgumentException
-                ("Student with the following account name = " + accountName + " is not found.");
+                    ("Student with the following account name = " + accountName + " is not found.");
         }
         return studentMapper.transformToDTO(student.get());
     }
 
-    @Override
-    public StudentDTO findByAccountNameAndPassword(String accountName, String password) {
-        Optional<Student> student = studentRepository.findByAccountNameAndPassword(accountName, password);
-        if (!student.isPresent()) {
-            throw new IllegalArgumentException
-                ("Student with the provided account name and password combination is not found.");
-        }
-        return studentMapper.transformToDTO(student.get());
+    private Student findById(Integer id) {
+        return studentRepository.findById(id).orElseThrow(() -> new IllegalArgumentException
+                ("Student with the following id = " + id + " is not found."));
     }
 }
