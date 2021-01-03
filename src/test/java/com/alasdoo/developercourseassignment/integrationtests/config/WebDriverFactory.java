@@ -9,6 +9,7 @@ import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.opera.OperaDriver;
+import org.openqa.selenium.safari.SafariDriver;
 
 @Slf4j
 public class WebDriverFactory {
@@ -33,7 +34,7 @@ public class WebDriverFactory {
                 WebDriverManager.operadriver().setup();
                 return new OperaDriver();
             case "safari":
-                throw new IllegalArgumentException("Not implemented");
+                return new SafariDriver();
             default:
                 WebDriverManager.firefoxdriver().setup();
                 return new FirefoxDriver();

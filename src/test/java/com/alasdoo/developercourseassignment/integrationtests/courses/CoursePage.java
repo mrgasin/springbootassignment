@@ -4,6 +4,7 @@ import com.alasdoo.developercourseassignment.entities.DeveloperCourse;
 import com.alasdoo.developercourseassignment.integrationtests.PageObject;
 import com.alasdoo.developercourseassignment.integrationtests.utils.FakerGenerator;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -52,6 +53,8 @@ public class CoursePage extends PageObject {
         addButton.click();
         courseName.sendKeys(course.getDeveloperCourseName());
         classesPerWeek.sendKeys(course.getClassesPerWeek().toString());
+//        costPerClass.sendKeys(Keys.chord(Keys.CONTROL, "a"), course.getCostPerClass().toString());
+        costPerClass.sendKeys(Keys.chord(Keys.CONTROL, "a"), Keys.DELETE);
         costPerClass.sendKeys(course.getCostPerClass().toString());
         save.click();
     }
@@ -68,6 +71,7 @@ public class CoursePage extends PageObject {
             int oldValue = oldPrice(index);
             int newValue = oldValue + 10;
             costPerClass.clear();
+            costPerClass.sendKeys(Keys.chord(Keys.CONTROL, "a"),Keys.DELETE);
             costPerClass.sendKeys(Integer.toString(newValue));
             save.click();
         }

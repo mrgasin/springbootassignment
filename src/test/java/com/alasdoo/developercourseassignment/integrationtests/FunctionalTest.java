@@ -1,7 +1,6 @@
 package com.alasdoo.developercourseassignment.integrationtests;
 
 import com.alasdoo.developercourseassignment.integrationtests.config.WebDriverFactory;
-import com.alasdoo.developercourseassignment.integrationtests.utils.FileUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.extension.*;
 import org.openqa.selenium.WebDriver;
@@ -20,7 +19,6 @@ public class FunctionalTest implements AfterEachCallback, AfterAllCallback, Befo
     @Override
     public void afterEach(ExtensionContext extensionContext) {
         webDriver.manage().deleteAllCookies();
-        log.error(FileUtils.getValue("selenium.browser"));
     }
 
     @Override
@@ -57,8 +55,7 @@ public class FunctionalTest implements AfterEachCallback, AfterAllCallback, Befo
 
         try {
             throw cause;
-        } catch (Throwable throwable) {
-            log.error("Rethrowing failed");
+        } catch (Throwable ignored) {
         }
     }
 }

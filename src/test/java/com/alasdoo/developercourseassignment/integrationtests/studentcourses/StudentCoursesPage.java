@@ -2,8 +2,10 @@ package com.alasdoo.developercourseassignment.integrationtests.studentcourses;
 
 import com.alasdoo.developercourseassignment.integrationtests.PageObject;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -73,7 +75,10 @@ public class StudentCoursesPage extends PageObject {
         wait.until(ExpectedConditions.visibilityOf(courseInput));
         wait.until(ExpectedConditions.elementToBeClickable(courseInput));
         courseInput.click();
-        WebElement course = coursesList.get((int) (Math.random() * coursesList.size() - 1));
+        int randomIndex = (int) (Math.random() * (coursesList.size() - 1));
+        WebElement course = coursesList.get(randomIndex);
+
+        scrollTo(course);
         wait.until(ExpectedConditions.visibilityOf(course));
         wait.until(ExpectedConditions.elementToBeClickable(course));
         course.click();
@@ -82,6 +87,12 @@ public class StudentCoursesPage extends PageObject {
         wait.until(ExpectedConditions.elementToBeClickable(save));
 
         save.click();
+    }
+
+    private void scrollTo(WebElement element) {
+        Actions actions = new Actions(webDriver);
+        actions.moveToElement(element);
+        actions.perform();
     }
 
     public void cancelCourse(int index) {
@@ -117,30 +128,18 @@ public class StudentCoursesPage extends PageObject {
         wait.until(ExpectedConditions.elementToBeClickable(classesBought));
         int newNumber = Integer.parseInt(numberOfCourses) + 5;
         classesBought.clear();
+        classesBought.sendKeys(Keys.chord(Keys.CONTROL, "a"), Keys.DELETE);
         classesBought.sendKeys(Integer.toString(newNumber));
         wait.until(ExpectedConditions.elementToBeClickable(save));
         save.click();
     }
 
-    public Integer numberOfStudents() {
-        return Integer.parseInt(table.getAttribute("aria-rowcount"));
-    }
-
-    private String studentId(int index) {
-        WebElement idColumn = students.get(index).findElement(By.cssSelector("div[data-field = 'id']"));
-        return idColumn.getText();
-    }
-
-    private int courseId(int index) {
-        WebElement course = coursesList.get(index);
-        return Integer.parseInt(course.getAttribute("data-value"));
-    }
-
     public int numberOfCourses(int index) {
-        wait.until(ExpectedConditions.visibilityOfAllElements(students));
-        WebElement student = students.get(index);
+        wait.until(webDriver -> webDriver.findElements(By.cssSelector("div[role = 'row']")));
+        WebElement student = webDriver.findElements(By.cssSelector("div[role = 'row']")).get(index);
         wait.until(ExpectedConditions.visibilityOf(student));
         wait.until(ExpectedConditions.elementToBeClickable(student));
+
         student.click();
         wait.until(ExpectedConditions.visibilityOf(toggleCourses));
         wait.until(ExpectedConditions.elementToBeClickable(toggleCourses));

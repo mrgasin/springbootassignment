@@ -29,11 +29,11 @@ public class StudentCoursesTest extends FunctionalTest {
         webDriver.get(baseUrl);
     }
 
-    @Test
-    public void dummyTest() {
-        boolean t = false;
-        assertTrue(t);
-    }
+//    @Test
+//    public void dummyTest() {
+//        boolean t = false;
+//        assertTrue(t);
+//    }
 
     @Test
     public void buyCourse() {

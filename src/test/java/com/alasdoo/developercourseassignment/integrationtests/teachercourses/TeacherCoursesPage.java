@@ -1,12 +1,16 @@
 package com.alasdoo.developercourseassignment.integrationtests.teachercourses;
 
 import com.alasdoo.developercourseassignment.integrationtests.PageObject;
+import com.alasdoo.developercourseassignment.integrationtests.courses.CoursePage;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TeacherCoursesPage extends PageObject {
@@ -65,8 +69,9 @@ public class TeacherCoursesPage extends PageObject {
         wait.until(ExpectedConditions.visibilityOf(courseInput));
         wait.until(ExpectedConditions.elementToBeClickable(courseInput));
         courseInput.click();
-
-        WebElement course = coursesList.get((int) (Math.random() * coursesList.size() - 1));
+        int randomIndex = (int) (Math.random() * (coursesList.size() - 1));
+        WebElement course = coursesList.get(randomIndex);
+        scrollTo(course);
         wait.until(ExpectedConditions.visibilityOf(course));
         wait.until(ExpectedConditions.elementToBeClickable(course));
         course.click();
@@ -75,7 +80,6 @@ public class TeacherCoursesPage extends PageObject {
         wait.until(ExpectedConditions.visibilityOf(save));
         wait.until(ExpectedConditions.elementToBeClickable(save));
         save.click();
-
     }
 
     public void removeCourse(int index) {
@@ -87,11 +91,11 @@ public class TeacherCoursesPage extends PageObject {
         wait.until(ExpectedConditions.visibilityOf(toggleCourses));
         wait.until(ExpectedConditions.elementToBeClickable(toggleCourses));
         toggleCourses.click();
-
         wait.until(ExpectedConditions.visibilityOf(teacherCoursesTable));
         int size = Integer.parseInt(teacherCoursesTable.getAttribute("aria-rowcount"));
         WebElement course = tableCourses.get((int) (Math.random() * size));
         wait.until(ExpectedConditions.elementToBeClickable(course));
+        wait.until(ExpectedConditions.visibilityOf(course));
         course.click();
         wait.until(ExpectedConditions.visibilityOf(delete));
         wait.until(ExpectedConditions.elementToBeClickable(delete));
@@ -99,11 +103,11 @@ public class TeacherCoursesPage extends PageObject {
     }
 
     public Integer numberOfCourses(int index) {
-        wait.until(ExpectedConditions.visibilityOfAllElements(teachers));
-        WebElement student = teachers.get(index);
-        wait.until(ExpectedConditions.visibilityOf(student));
-        wait.until(ExpectedConditions.elementToBeClickable(student));
-        student.click();
+        wait.until(webDriver -> webDriver.findElements(By.cssSelector("div[role = 'row']")));
+        WebElement teacher = webDriver.findElements(By.cssSelector("div[role = 'row']")).get(index);
+        wait.until(ExpectedConditions.visibilityOf(teacher));
+        wait.until(ExpectedConditions.elementToBeClickable(teacher));
+        teacher.click();
         wait.until(ExpectedConditions.visibilityOf(toggleCourses));
         wait.until(ExpectedConditions.elementToBeClickable(toggleCourses));
         toggleCourses.click();
@@ -113,5 +117,20 @@ public class TeacherCoursesPage extends PageObject {
         wait.until(ExpectedConditions.elementToBeClickable(close));
         close.click();
         return size;
+    }
+
+    private List<Integer> getCourseIds() {
+        webDriver.navigate().to(CoursePage.baseUrl);
+        List<WebElement> courses = webDriver.findElements(By.cssSelector("div[data-field = 'id']"));
+        wait.until(ExpectedConditions.visibilityOfAllElements(courses));
+        List<Integer> ids = new ArrayList<>();
+        courses.forEach(course -> ids.add(Integer.parseInt(course.getText())));
+        webDriver.navigate().to(baseUrl);
+        return ids;
+    }
+    private void scrollTo(WebElement element) {
+        Actions actions = new Actions(webDriver);
+        actions.moveToElement(element);
+        actions.perform();
     }
 }

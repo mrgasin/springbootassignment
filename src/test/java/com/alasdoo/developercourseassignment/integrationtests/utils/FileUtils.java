@@ -40,7 +40,6 @@ public class FileUtils {
     }
 
     public static String getValue(String key) {
-        System.out.println(key);
         Map<String, String> map = convertToMap(readPropertiesFile());
         return map.get(key);
     }

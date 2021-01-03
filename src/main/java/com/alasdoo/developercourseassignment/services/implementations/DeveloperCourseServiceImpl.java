@@ -2,13 +2,14 @@ package com.alasdoo.developercourseassignment.services.implementations;
 
 import com.alasdoo.developercourseassignment.dtos.DeveloperCourseDTO;
 import com.alasdoo.developercourseassignment.entities.DeveloperCourse;
+import com.alasdoo.developercourseassignment.entities.StudentDeveloperCourse;
+import com.alasdoo.developercourseassignment.entities.TeacherDeveloperCourse;
 import com.alasdoo.developercourseassignment.mappers.DeveloperCourseMapper;
-import com.alasdoo.developercourseassignment.repositories.DeveloperCourseRepository;
-import com.alasdoo.developercourseassignment.repositories.StudentRepository;
-import com.alasdoo.developercourseassignment.repositories.TeacherRepository;
+import com.alasdoo.developercourseassignment.repositories.*;
 import com.alasdoo.developercourseassignment.services.contracts.DeveloperCourseService;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -20,13 +21,18 @@ public class DeveloperCourseServiceImpl implements DeveloperCourseService {
     private final StudentRepository studentRepository;
     private final TeacherRepository teacherRepository;
     private final DeveloperCourseMapper developerCourseMapper;
+    private final StudentDeveloperCourseRepository studentDeveloperCourseRepository;
+    private final TeacherDeveloperCourseRepository teacherDeveloperCourseRepository;
 
-    public DeveloperCourseServiceImpl(DeveloperCourseRepository developerCourseRepository, StudentRepository studentRepository, TeacherRepository teacherRepository, DeveloperCourseMapper developerCourseMapper) {
+    public DeveloperCourseServiceImpl(DeveloperCourseRepository developerCourseRepository, StudentRepository studentRepository, TeacherRepository teacherRepository, DeveloperCourseMapper developerCourseMapper, StudentDeveloperCourseRepository studentDeveloperCourseRepository, TeacherDeveloperCourseRepository teacherDeveloperCourseRepository) {
         this.developerCourseRepository = developerCourseRepository;
         this.studentRepository = studentRepository;
         this.teacherRepository = teacherRepository;
         this.developerCourseMapper = developerCourseMapper;
+        this.studentDeveloperCourseRepository = studentDeveloperCourseRepository;
+        this.teacherDeveloperCourseRepository = teacherDeveloperCourseRepository;
     }
+
 
     @Override
     public DeveloperCourseDTO findOne(Integer id) {
@@ -50,11 +56,24 @@ public class DeveloperCourseServiceImpl implements DeveloperCourseService {
     }
 
     @Override
-    public void remove(Integer id) throws IllegalArgumentException {
+    @Transactional
+    public void remove(Integer id) {
         Optional<DeveloperCourse> developerCourse = developerCourseRepository.findById(id);
         if (!developerCourse.isPresent()) {
             throw new IllegalArgumentException
                     ("Course with the following id = " + id + " is not found.");
+        }
+        List<StudentDeveloperCourse> studentCourses = studentDeveloperCourseRepository.findByDeveloperCourseId(id).orElseThrow(() -> new IllegalArgumentException(" Not found"));
+        List<TeacherDeveloperCourse> teacherCourses = teacherDeveloperCourseRepository.findByDeveloperCourseId(id).orElseThrow(() -> new IllegalArgumentException("Not found"));
+        boolean isAssignedToStudents = studentCourses.stream().anyMatch(course -> course.getDeveloperCourseId().equals(id));
+        boolean isAssignedToTeachers = teacherCourses.stream().anyMatch(course -> course.getDeveloperCourseId().equals(id));
+
+        if (isAssignedToTeachers){
+            teacherDeveloperCourseRepository.deleteAllByDeveloperCourseId(id);
+        }
+
+        if (isAssignedToStudents){
+            studentDeveloperCourseRepository.deleteAllByDeveloperCourseId(id);
         }
         developerCourseRepository.deleteById(id);
     }

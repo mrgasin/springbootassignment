@@ -15,4 +15,6 @@ public interface StudentDeveloperCourseRepository extends JpaRepository<StudentD
     Optional<List<StudentDeveloperCourse>> findByDeveloperCourseId(Integer developerCourseId);
 
     Optional<StudentDeveloperCourse> findByDeveloperCourseIdAndStudentId(Integer developerCourseId, Integer studentId);
+
+    void deleteAllByDeveloperCourseId(Integer courseId);
 }
