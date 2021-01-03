@@ -2,8 +2,6 @@ package com.alasdoo.developercourseassignment.services.implementations;
 
 import com.alasdoo.developercourseassignment.dtos.DeveloperCourseDTO;
 import com.alasdoo.developercourseassignment.entities.DeveloperCourse;
-import com.alasdoo.developercourseassignment.entities.StudentDeveloperCourse;
-import com.alasdoo.developercourseassignment.entities.TeacherDeveloperCourse;
 import com.alasdoo.developercourseassignment.mappers.DeveloperCourseMapper;
 import com.alasdoo.developercourseassignment.repositories.*;
 import com.alasdoo.developercourseassignment.services.contracts.DeveloperCourseService;
@@ -32,7 +30,6 @@ public class DeveloperCourseServiceImpl implements DeveloperCourseService {
         this.studentDeveloperCourseRepository = studentDeveloperCourseRepository;
         this.teacherDeveloperCourseRepository = teacherDeveloperCourseRepository;
     }
-
 
     @Override
     public DeveloperCourseDTO findOne(Integer id) {

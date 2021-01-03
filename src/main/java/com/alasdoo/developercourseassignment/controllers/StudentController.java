@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/student")
-@CrossOrigin
 public class StudentController {
 
     private final StudentService studentService;

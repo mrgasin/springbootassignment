@@ -11,7 +11,7 @@ public class FakerGenerator {
     private FakerGenerator() {
     }
 
-    private static Faker faker = new Faker();
+    private static final Faker faker = new Faker();
 
     private static Person newPerson() {
         Person person = new Person();

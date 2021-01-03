@@ -10,7 +10,7 @@ import java.util.Optional;
 @Repository
 public interface StudentDeveloperCourseRepository extends JpaRepository<StudentDeveloperCourse, Integer> {
 
-    Optional<StudentDeveloperCourse> findByStudentId(Integer studentId);
+    Optional<List<StudentDeveloperCourse>> findByStudentId(Integer studentId);
 
     Optional<List<StudentDeveloperCourse>> findByDeveloperCourseId(Integer developerCourseId);
 

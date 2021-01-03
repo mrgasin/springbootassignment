@@ -11,6 +11,7 @@ public final class CaseFormat {
         return Stream
                 .of(upperCamel.split("(?=[A-Z])"))
                 .map(String::toLowerCase)
+                .map(String::trim)
                 .collect(Collectors.joining("_"));
     }
 }

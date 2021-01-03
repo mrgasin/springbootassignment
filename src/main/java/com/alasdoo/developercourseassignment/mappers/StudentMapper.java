@@ -19,5 +19,4 @@ public class StudentMapper {
         BeanUtils.copyProperties(studentDTOSrc, student);
         return student;
     }
-
 }

@@ -12,7 +12,7 @@ import java.util.List;
 @RequestMapping("/teacherdevelopercourse")
 @CrossOrigin(origins = "http://localhost:3000")
 public class TeacherDeveloperCourseController {
-    
+
     private final TeacherDeveloperCourseService teacherDeveloperCourseService;
 
     public TeacherDeveloperCourseController(TeacherDeveloperCourseService teacherDeveloperCourseService) {
@@ -46,8 +46,7 @@ public class TeacherDeveloperCourseController {
     }
 
     @GetMapping(value = "/get/teacher/{teacherId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public TeacherDeveloperCourseDTO findByTeacherId(@PathVariable("teacherId") Integer teacherId) {
-        return teacherDeveloperCourseService.findByTeacherId(teacherId);
+    public List<TeacherDeveloperCourseDTO> findByTeacherId(@PathVariable("teacherId") Integer teacherId) {
+        return teacherDeveloperCourseService.findAllByTeacherId(teacherId);
     }
-
 }

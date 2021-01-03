@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface StudentDeveloperCourseService extends CrudService<StudentDeveloperCourseDTO> {
 
-    StudentDeveloperCourseDTO findByStudentId(Integer studentId);
+    List<StudentDeveloperCourseDTO> findAllByStudentId(Integer studentId);
 
-    List<StudentDeveloperCourseDTO> findByDeveloperCourseId(Integer developerCourseId);
+    List<StudentDeveloperCourseDTO> findAllByDeveloperCourseId(Integer developerCourseId);
 }

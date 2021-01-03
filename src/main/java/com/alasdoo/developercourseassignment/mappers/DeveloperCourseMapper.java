@@ -5,8 +5,8 @@ import com.alasdoo.developercourseassignment.entities.DeveloperCourse;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class DeveloperCourseMapper {
@@ -24,11 +24,6 @@ public class DeveloperCourseMapper {
     }
 
     public List<DeveloperCourseDTO> transformToListOfDTO(List<DeveloperCourse> developerCourseSrc) {
-        List<DeveloperCourseDTO> developerCourseDTO = new ArrayList<>(developerCourseSrc.size());
-        for (DeveloperCourse developerCourse : developerCourseSrc) {
-            developerCourseDTO.add(transformToDTO(developerCourse));
-        }
-        return developerCourseDTO;
+        return developerCourseSrc.stream().map(this::transformToDTO).collect(Collectors.toList());
     }
-
 }

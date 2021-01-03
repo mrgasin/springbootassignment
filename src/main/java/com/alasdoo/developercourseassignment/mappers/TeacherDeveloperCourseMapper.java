@@ -5,6 +5,9 @@ import com.alasdoo.developercourseassignment.entities.TeacherDeveloperCourse;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Component
 public class TeacherDeveloperCourseMapper {
 
@@ -18,5 +21,9 @@ public class TeacherDeveloperCourseMapper {
         TeacherDeveloperCourse teacherDeveloperCourse = new TeacherDeveloperCourse();
         BeanUtils.copyProperties(teacherDeveloperCourseDTOSrc, teacherDeveloperCourse);
         return teacherDeveloperCourse;
+    }
+
+    public List<TeacherDeveloperCourseDTO> transformToListOfDTO(List<TeacherDeveloperCourse> teacherDeveloperCourseDTOSrc) {
+        return teacherDeveloperCourseDTOSrc.stream().map(this::transformToDTO).collect(Collectors.toList());
     }
 }

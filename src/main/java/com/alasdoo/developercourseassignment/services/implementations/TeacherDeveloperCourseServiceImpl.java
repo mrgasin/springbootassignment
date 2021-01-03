@@ -78,17 +78,19 @@ public class TeacherDeveloperCourseServiceImpl implements TeacherDeveloperCourse
     }
 
     @Override
-    public TeacherDeveloperCourseDTO findByTeacherId(Integer teacherId) {
-        Optional<TeacherDeveloperCourse> teacherDeveloperCourse = teacherDeveloperCourseRepository.findByTeacherId(teacherId);
-        if (!teacherDeveloperCourse.isPresent()) {
-            throw new IllegalArgumentException
-                    ("Teacher with the following id = " + teacherId + " is not found.");
-        }
-        return teacherDeveloperCourseMapper.transformToDTO(teacherDeveloperCourse.get());
+    public List<TeacherDeveloperCourseDTO> findAllByTeacherId(Integer teacherId) {
+        List<TeacherDeveloperCourse> teacherDeveloperCourses = getAllByTeacherId(teacherId);
+
+        return teacherDeveloperCourseMapper.transformToListOfDTO(teacherDeveloperCourses);
     }
 
     private TeacherDeveloperCourse findById(Integer id) {
         return teacherDeveloperCourseRepository.findById(id).orElseThrow(() -> new IllegalArgumentException
                 ("Teacher Developer Course with the following id = " + id + " is not found."));
+    }
+
+    private List<TeacherDeveloperCourse> getAllByTeacherId(Integer teacherId) {
+        return teacherDeveloperCourseRepository.findAllByTeacherId(teacherId).orElseThrow(() -> new IllegalArgumentException
+                ("Teacher with the following id = " + teacherId + " is not found."));
     }
 }

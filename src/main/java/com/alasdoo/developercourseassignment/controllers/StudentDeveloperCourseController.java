@@ -12,7 +12,7 @@ import java.util.List;
 @RequestMapping("/studentdevelopercourse")
 @CrossOrigin
 public class StudentDeveloperCourseController {
-    
+
     private final StudentDeveloperCourseService studentDeveloperCourseService;
 
     public StudentDeveloperCourseController(StudentDeveloperCourseService studentDeveloperCourseService) {
@@ -46,12 +46,12 @@ public class StudentDeveloperCourseController {
     }
 
     @GetMapping(value = "/get/student/{studentId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public StudentDeveloperCourseDTO findByStudentId(@PathVariable("studentId") Integer studentId) {
-        return studentDeveloperCourseService.findByStudentId(studentId);
+    public List<StudentDeveloperCourseDTO> findAllByStudentId(@PathVariable("studentId") Integer studentId) {
+        return studentDeveloperCourseService.findAllByStudentId(studentId);
     }
 
     @GetMapping(value = "/get/course/{courseId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<StudentDeveloperCourseDTO> findByCourseId(@PathVariable("courseId") Integer courseId) {
-        return studentDeveloperCourseService.findByDeveloperCourseId(courseId);
+    public List<StudentDeveloperCourseDTO> findAllByCourseId(@PathVariable("courseId") Integer courseId) {
+        return studentDeveloperCourseService.findAllByDeveloperCourseId(courseId);
     }
 }

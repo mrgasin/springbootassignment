@@ -12,9 +12,9 @@ public interface TeacherDeveloperCourseRepository extends JpaRepository<TeacherD
 
     Optional<TeacherDeveloperCourse> findByDeveloperCourseIdAndTeacherId(Integer developerCourseId, Integer teacherId);
 
-    Optional<List<TeacherDeveloperCourse>> findByDeveloperCourseId(Integer developerCourseId);
+    Optional<List<TeacherDeveloperCourse>> findAllByDeveloperCourseId(Integer developerCourseId);
 
-    Optional<TeacherDeveloperCourse> findByTeacherId(Integer teacherId);
+    Optional<List<TeacherDeveloperCourse>> findAllByTeacherId(Integer teacherId);
 
     void deleteAllByDeveloperCourseId(Integer courseId);
 

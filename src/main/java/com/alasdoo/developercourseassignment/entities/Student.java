@@ -1,5 +1,7 @@
 package com.alasdoo.developercourseassignment.entities;
 
+import lombok.Data;
+
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Column;
@@ -9,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+@Data
 @Entity
 @Table(name = "student")
 public class Student implements Serializable {
@@ -29,72 +32,4 @@ public class Student implements Serializable {
     private String email;
     @Column(name = "bank_card_number", nullable = false, length = 16)
     private Integer bankCardNumber;
-
-    public Student() {
-    }
-
-    public Student(String name, String surname, String accountName, String password, String email, Integer bankCardNumber) {
-        this.name = name;
-        this.surname = surname;
-        this.accountName = accountName;
-        this.password = password;
-        this.email = email;
-        this.bankCardNumber = bankCardNumber;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getSurname() {
-        return surname;
-    }
-
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
-
-    public String getAccountName() {
-        return accountName;
-    }
-
-    public void setAccountName(String accountName) {
-        this.accountName = accountName;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public Integer getBankCardNumber() {
-        return bankCardNumber;
-    }
-
-    public void setBankCardNumber(Integer bankCardNumber) {
-        this.bankCardNumber = bankCardNumber;
-    }
 }

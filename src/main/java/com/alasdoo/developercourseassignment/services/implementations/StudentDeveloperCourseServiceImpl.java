@@ -80,17 +80,17 @@ public class StudentDeveloperCourseServiceImpl implements StudentDeveloperCourse
     }
 
     @Override
-    public StudentDeveloperCourseDTO findByStudentId(Integer studentId) {
-        Optional<StudentDeveloperCourse> studentDeveloperCourse = studentDeveloperCourseRepository.findByStudentId(studentId);
-        if (!studentDeveloperCourse.isPresent()) {
+    public List<StudentDeveloperCourseDTO> findAllByStudentId(Integer studentId) {
+        Optional<List<StudentDeveloperCourse>> studentDeveloperCourses = studentDeveloperCourseRepository.findByStudentId(studentId);
+        if (!studentDeveloperCourses.isPresent()) {
             throw new IllegalArgumentException
                     ("Student with the following id = " + studentId + " is not found.");
         }
-        return studentDeveloperCourseMapper.transformToDTO(studentDeveloperCourse.get());
+        return studentDeveloperCourseMapper.transformToListOfDTO(studentDeveloperCourses.get());
     }
 
     @Override
-    public List<StudentDeveloperCourseDTO> findByDeveloperCourseId(Integer developerCourseId) {
+    public List<StudentDeveloperCourseDTO> findAllByDeveloperCourseId(Integer developerCourseId) {
         Optional<List<StudentDeveloperCourse>> studentDeveloperCourse = studentDeveloperCourseRepository.findByDeveloperCourseId(developerCourseId);
         if (!studentDeveloperCourse.isPresent()) {
             throw new IllegalArgumentException

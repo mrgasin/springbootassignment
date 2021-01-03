@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/developercourse")
-@CrossOrigin
 public class DeveloperCourseController {
     
     private final DeveloperCourseService developerCourseService;
