@@ -10,21 +10,24 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 @Ignore
 public class FileUtilsTest {
 
-    @Test
-    public void getValue(){
-        String result = FileUtils.getValue("selenium.browser");
-        assertEquals(result, "edge");
-    }
-
-    @Test
-    public void getNoneExistingValue(){
-        String result = FileUtils.getValue("not.there");
-        assertNull(result);
-    }
-
-    @Test
-    public void getEmptyValue(){
-        String result = FileUtils.getValue("spring.datasource.password");
-        assertEquals(result, "");
-    }
+//    @Test
+//    @Ignore
+//    public void getValue(){
+//        String result = FileUtils.getValue("selenium.browser");
+//        assertEquals(result, "edge");
+//    }
+//
+//    @Test
+//    @Ignore
+//    public void getNoneExistingValue(){
+//        String result = FileUtils.getValue("not.there");
+//        assertNull(result);
+//    }
+//
+//    @Test
+//    @Ignore
+//    public void getEmptyValue(){
+//        String result = FileUtils.getValue("spring.datasource.password");
+//        assertEquals(result, "");
+//    }
 }

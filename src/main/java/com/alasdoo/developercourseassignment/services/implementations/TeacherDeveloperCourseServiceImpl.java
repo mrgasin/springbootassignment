@@ -46,20 +46,7 @@ public class TeacherDeveloperCourseServiceImpl implements TeacherDeveloperCourse
         TeacherDeveloperCourse teacherDeveloperCourse = teacherDeveloperCourseMapper.transformToEntity(teacherDeveloperCourseDTO);
         Integer teacherId = teacherDeveloperCourseDTO.getTeacherId();
         Integer courseId = teacherDeveloperCourseDTO.getDeveloperCourseId();
-        Optional<Teacher> teacher = teacherRepository.findById(teacherId);
-        Optional<DeveloperCourse> developerCourse = developerCourseRepository.findById(courseId);
-        if (!teacher.isPresent()) {
-            throw new IllegalArgumentException
-                    ("Teacher with the following id = " + teacherId + " is not found.");
-        }
-        if (!developerCourse.isPresent()) {
-            throw new IllegalArgumentException
-                    ("Course with the following id = " + courseId + " is not found.");
-        }
-        if (teacherDeveloperCourseRepository.findByDeveloperCourseIdAndTeacherId(courseId, teacherId).isPresent()) {
-            throw new IllegalArgumentException
-                    ("Teacher course combination is already present.");
-        }
+        checkIsAvailable(teacherId, courseId);
         return teacherDeveloperCourseMapper.transformToDTO(teacherDeveloperCourseRepository.save(teacherDeveloperCourse));
     }
 
@@ -80,7 +67,6 @@ public class TeacherDeveloperCourseServiceImpl implements TeacherDeveloperCourse
     @Override
     public List<TeacherDeveloperCourseDTO> findAllByTeacherId(Integer teacherId) {
         List<TeacherDeveloperCourse> teacherDeveloperCourses = getAllByTeacherId(teacherId);
-
         return teacherDeveloperCourseMapper.transformToListOfDTO(teacherDeveloperCourses);
     }
 
@@ -92,5 +78,22 @@ public class TeacherDeveloperCourseServiceImpl implements TeacherDeveloperCourse
     private List<TeacherDeveloperCourse> getAllByTeacherId(Integer teacherId) {
         return teacherDeveloperCourseRepository.findAllByTeacherId(teacherId).orElseThrow(() -> new IllegalArgumentException
                 ("Teacher with the following id = " + teacherId + " is not found."));
+    }
+
+    private void checkIsAvailable(Integer teacherId, Integer courseId){
+        Optional<Teacher> teacher = teacherRepository.findById(teacherId);
+        Optional<DeveloperCourse> developerCourse = developerCourseRepository.findById(courseId);
+        if (!teacher.isPresent()) {
+            throw new IllegalArgumentException
+                    ("Teacher with the following id = " + teacherId + " is not found.");
+        }
+        if (!developerCourse.isPresent()) {
+            throw new IllegalArgumentException
+                    ("Course with the following id = " + courseId + " is not found.");
+        }
+        if (teacherDeveloperCourseRepository.findByDeveloperCourseIdAndTeacherId(courseId, teacherId).isPresent()) {
+            throw new IllegalArgumentException
+                    ("Teacher course combination is already present.");
+        }
     }
 }
